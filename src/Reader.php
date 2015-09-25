@@ -4,6 +4,8 @@ namespace SP\Crawler;
 
 use SP\Spiderling\CrawlerInterface;
 use SP\Spiderling\Query\AbstractQuery;
+use GuzzleHttp\Psr7\Uri;
+use Psr\Http\Message\UriInterface;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -104,7 +106,7 @@ class Reader implements CrawlerInterface
      * @param  string $url
      * @throws BadMethodCallException
      */
-    public function open($url)
+    public function open(UriInterface $url)
     {
         throw new BadMethodCallException(
             sprintf('Method %s not supported by %s', __METHOD__, __CLASS__)
@@ -112,27 +114,11 @@ class Reader implements CrawlerInterface
     }
 
     /**
-     * @throws BadMethodCallException
-     */
-    public function getPath()
-    {
-        return null;
-    }
-
-    /**
-     * @throws BadMethodCallException
+     * @return Psr\Http\Message\UriInterface
      */
     public function getUri()
     {
-        return null;
-    }
-
-    /**
-     * @throws BadMethodCallException
-     */
-    public function getUserAgent()
-    {
-        return null;
+        return new Uri('');
     }
 
     /**

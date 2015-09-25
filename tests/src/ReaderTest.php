@@ -5,6 +5,7 @@ namespace SP\Crawler\Test;
 use SP\PhpunitDomConstraints\DomConstraintsTrait;
 use DOMDocument;
 use SP\Crawler\Reader;
+use GuzzleHttp\Psr7\Uri;
 
 /**
  * @coversDefaultClass SP\Crawler\Reader
@@ -56,27 +57,11 @@ class ReaderTest extends AbstractTestCase
     }
 
     /**
-     * @covers ::getPath
-     */
-    public function testGetPath()
-    {
-        $this->assertNull($this->reader->getPath());
-    }
-
-    /**
      * @covers ::getUri
      */
     public function testGetUri()
     {
-        $this->assertNull($this->reader->getUri());
-    }
-
-    /**
-     * @covers ::getUserAgent
-     */
-    public function testGetUserAgent()
-    {
-        $this->assertNull($this->reader->getUserAgent());
+        $this->assertInstanceOf('Psr\Http\Message\UriInterface', $this->reader->getUri());
     }
 
     /**
@@ -89,7 +74,7 @@ class ReaderTest extends AbstractTestCase
             'Method SP\Crawler\Reader::open not supported by SP\Crawler\Reader'
         );
 
-        $this->reader->open('test id');
+        $this->reader->open(new Uri('test id'));
     }
 
     /**

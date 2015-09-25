@@ -124,7 +124,7 @@ HTML;
      */
     public function testOpen()
     {
-        $uri = 'http://example.com/api/users';
+        $uri = new Uri('http://example.com/api/users');
 
         $crawler = $this
             ->getMockBuilder('SP\Crawler\Crawler')
@@ -139,30 +139,13 @@ HTML;
                 $this->logicalAnd(
                     $this->isInstanceOf('Psr\Http\Message\RequestInterface'),
                     $this->attribute(
-                        $this->equalTo(new Uri('http://example.com/api/users')),
+                        $this->equalTo($uri),
                         'uri'
                     )
                 )
             );
 
-        $result = $crawler->open('http://example.com/api/users');
-    }
-
-    /**
-     * @covers ::getPath
-     */
-    public function testGetPath()
-    {
-        $uri = new Uri('http://example.com/api/users');
-
-        $this->loader
-            ->expects($this->once())
-            ->method('getCurrentUri')
-            ->willReturn($uri);
-
-        $result = $this->crawler->getPath();
-
-        $this->assertEquals('/api/users', $result);
+        $result = $crawler->open($uri);
     }
 
     /**
@@ -182,22 +165,5 @@ HTML;
         $result = $this->crawler->getUri();
 
         $this->assertEquals($uriString, $result);
-    }
-
-    /**
-     * @covers ::getUserAgent
-     */
-    public function testGetUserAgent()
-    {
-        $userAgent = 'Mozzila';
-
-        $this->loader
-            ->expects($this->once())
-            ->method('getUserAgent')
-            ->willReturn($userAgent);
-
-        $result = $this->crawler->getUserAgent();
-
-        $this->assertEquals($userAgent, $result);
     }
 }

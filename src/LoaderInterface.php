@@ -11,7 +11,18 @@ use Psr\Http\Message\RequestInterface;
  */
 interface LoaderInterface
 {
+    /**
+     * @param  RequestInterface $request
+     */
     public function send(RequestInterface $request);
+
+    /**
+     * @return Psr\Http\Message\UriInterface
+     */
     public function getCurrentUri();
+
+    /**
+     * @return string
+     */
     public function getUserAgent();
 }

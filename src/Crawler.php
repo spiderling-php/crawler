@@ -3,6 +3,7 @@
 namespace SP\Crawler;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
 use GuzzleHttp\Psr7\Request;
 use DOMDocument;
 
@@ -69,7 +70,7 @@ class Crawler extends Reader
     /**
      * @param  string $uri
      */
-    public function open($uri)
+    public function open(UriInterface $uri)
     {
         $request = new Request('GET', $uri);
 
@@ -96,26 +97,10 @@ class Crawler extends Reader
     }
 
     /**
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->loader->getCurrentUri()->getPath();
-    }
-
-    /**
-     * @return string
+     * @return UriInterface
      */
     public function getUri()
     {
-        return (string) $this->loader->getCurrentUri();
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserAgent()
-    {
-        return $this->loader->getUserAgent();
+        return $this->loader->getCurrentUri();
     }
 }
