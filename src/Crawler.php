@@ -111,7 +111,7 @@ class Crawler extends Reader
     }
 
     /**
-     * @return UriInterface
+     * @return Psr\Http\Message\UriInterface
      */
     public function getUri()
     {

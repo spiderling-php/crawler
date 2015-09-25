@@ -20,9 +20,4 @@ interface LoaderInterface
      * @return Psr\Http\Message\UriInterface
      */
     public function getCurrentUri();
-
-    /**
-     * @return string
-     */
-    public function getUserAgent();
 }
