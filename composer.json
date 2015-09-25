@@ -1,0 +1,29 @@
+{
+    "name": "spiderling-php/crawler",
+    "description": "A backbone for static spiderling crawlers",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Ivan Kerin",
+            "email": "ikerin@gmail.com",
+            "role": "Author"
+        }
+    ],
+    "require": {
+        "spiderling-php/spiderling": "dev-master@dev",
+        "guzzlehttp/psr7": "^1.0"
+    },
+    "require-dev": {
+        "spiderling-php/phpunit-matches-selector": "^0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "SP\\Crawler\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SP\\Crawler\\Test\\": "tests/src/"
+        }
+    }
+}

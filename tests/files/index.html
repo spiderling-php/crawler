@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="index">
+            <div class="content">
+                <ul class="subnav">
+                    <li>
+                        <a class="navlink" href="/test_functest/subpage1" id="navlink-1" title="Subpage Title 1">Subpage 1 <img alt="icon 1" src="icon1.png"></a>
+                    </li>
+                    <li>
+                        <a class="navlink" href="/test_functest/subpage2" id="navlink-2" title="Subpage Title 2">Subpage 2 <img alt="icon 2" src="icon2.png"></a>
+                    </li>
+                    <li>
+                        <a class="navlink" href="/test_functest/subpage3" id="navlink-3" title="Subpage Title 3">Subpage 3 <img alt="icon 3" src="icon3.png"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page">
+                <p id="p-1">
+                    Lorem ipsum dolor sit amet, <em>consectetur</em> adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                <p id="p-2">
+                    Filtered! Ut <em>enim</em> ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in <strong>voluptate velit</strong> esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+                <p id="p-3" style="display:none;">
+                    This is a hidden text!
+                </p>
+            </div>
+            <form action="/test_functest/contact" class="contact" id="form" method="post" name="form">
+                <fieldset>
+                    <div class="row">
+                        <label for="email">Enter Email</label>
+                        <input id="email" name="email" placeholder="This is your email" value="tom@example.com">
+                    </div>
+                    <div class="row">
+                        <label for="name">Enter Name</label>
+                        <input id="name" name="name" value="Tomas">
+                    </div>
+                    <div class="row">
+                        <label for="gender-1">Gender Male</label>
+                        <input id="gender-1" name="gender" type="radio" value="male">
+                        <label for="gender-2">Gender Female</label>
+                        <input checked id="gender-2" name="gender" type="radio" value="female">
+                    </div>
+                    <div class="row">
+                        <label for="notifyme">Enter Notify Me</label>
+                        <input id="notifyme" value="yes" name="notifyme" type="checkbox">
+                    </div>
+                    <div class="row">
+                        <label for="newsletters">Recieve Newsletters</label>
+                        <input id="newsletters" name="newsletters" value="test" type="checkbox" checked>
+                    </div>
+                    <div class="row">
+                        <label for="message">Enter Message</label>
+                        <textarea cols="30" id="message" name="message" rows="10">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+ tempor incididunt ut labore et dolore magna aliqua.</textarea>
+                    </div>
+                    <div class="row">
+                        <label for="country">Enter Country</label>
+                        <select id="country" name="country">
+                            <option value="uk" id="uk" selected>
+                                United Kingdom
+                            </option>
+                            <option value="bulgaria" id="bulgaria">
+                                Bulgaria
+                            </option>
+                            <option value="us">
+                                United States
+                            </option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label for="file" title="Logo Title">
+                            Logo <img alt="Logo Image" src="Logo.png">
+                        </label>
+                        <input id="file" name="file" type="file" value="file.txt">
+                    </div>
+                    <div class="actions">
+                        <input id="submit" name="submit input" type="submit" value="Submit Item">
+                        <button id="submit-btn" type="submit">
+                            Submit Button
+                        </button>
+                        <button id="submit-btn-icon" title="Image Title" type="submit">
+                            <img alt="Submit Image" src="submit.png">
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>
