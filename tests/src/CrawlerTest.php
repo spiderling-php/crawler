@@ -26,6 +26,7 @@ class CrawlerTest extends AbstractTestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getLoader
      * @covers ::getClickableMap
      */
     public function testConstruct()
@@ -33,6 +34,7 @@ class CrawlerTest extends AbstractTestCase
         $crawler = new Crawler($this->loader, $this->document);
 
         $this->assertSame($this->document, $crawler->getDocument());
+        $this->assertSame($this->loader, $crawler->getLoader());
 
         $this->assertInstanceOf('SP\Crawler\ElementMap', $crawler->getInputMap());
         $this->assertSame($crawler, $crawler->getClickableMap()->getReader());

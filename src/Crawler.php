@@ -6,6 +6,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 use GuzzleHttp\Psr7\Request;
 use DOMDocument;
+use DOMElement;
 
 /**
  * @author    Ivan Kerin <ikerin@gmail.com>
@@ -36,6 +37,11 @@ class Crawler extends Reader
     private $clickableMap;
 
     /**
+     * @var LoaderInterface
+     */
+    private $loader;
+
+    /**
      * @param LoaderInterface $loader
      * @param DOMDocument     $document
      */
@@ -46,6 +52,14 @@ class Crawler extends Reader
         $this->clickableMap = new ElementMap($this, Crawler::$clickableMatchers);
 
         parent::__construct($document);
+    }
+
+    /**
+     * @return LoaderInterface
+     */
+    public function getLoader()
+    {
+        return $this->loader;
     }
 
     /**
@@ -81,7 +95,7 @@ class Crawler extends Reader
      * @param  DOMElement $element
      * @return Element\AbstractClickable
      */
-    public function getClickable($element)
+    public function getClickable(DOMElement $element)
     {
         return $this->clickableMap->get($element);
     }

@@ -10,7 +10,7 @@ namespace SP\Crawler\Element;
 class Form extends AbstractElement
 {
     /**
-     * @var array
+     * @var string
      */
     private static $fieldsXPath = <<<FIELDS
 //*[not(@disabled) and (

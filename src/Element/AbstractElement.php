@@ -13,6 +13,16 @@ use DOMElement;
 abstract class AbstractElement
 {
     /**
+     * @var DOMElement
+     */
+    private $element;
+
+    /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
      * @param Reader     $reader
      * @param DOMElement $element
      */

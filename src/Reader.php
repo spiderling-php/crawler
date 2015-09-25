@@ -245,9 +245,9 @@ class Reader implements CrawlerInterface
     }
 
     /**
-     * @param  string $id
+     * @param  DOMElement $element
      * @throws InvalidArgumentException when id not found
-     * @return Element/AbstractInput
+     * @return Element\AbstractInput
      */
     public function getInput(DOMElement $element)
     {
