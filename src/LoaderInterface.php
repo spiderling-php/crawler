@@ -17,7 +17,7 @@ interface LoaderInterface
     public function send(RequestInterface $request);
 
     /**
-     * @return Psr\Http\Message\UriInterface
+     * @return \Psr\Http\Message\UriInterface
      */
     public function getCurrentUri();
 }
