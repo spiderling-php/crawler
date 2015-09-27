@@ -13,7 +13,7 @@ class RadioTest extends AbstractTestCase
     public function dataGetValue()
     {
         return [
-            ['gender-1', null],
+            ['gender-1', 'male'],
             ['gender-2', 'female'],
         ];
     }

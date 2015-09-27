@@ -14,11 +14,7 @@ class Option extends AbstractInput
      */
     public function getValue()
     {
-        if ($this->hasAttribute('selected')) {
-            return $this->getAttribute('value');
-        } else {
-            return '';
-        }
+        return $this->getAttribute('value');
     }
 
     /**

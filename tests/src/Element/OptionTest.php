@@ -15,7 +15,7 @@ class OptionTest extends AbstractTestCase
     {
         return [
             ['uk', 'uk'],
-            ['bulgaria', ''],
+            ['bulgaria', 'bulgaria'],
         ];
     }
 

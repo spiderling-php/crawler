@@ -22,14 +22,10 @@ class Checkbox extends AbstractInput
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getValue()
     {
-        if ($this->hasAttribute('checked')) {
-            return $this->getAttribute('value');
-        } else {
-            return null;
-        }
+        return $this->getAttribute('value');
     }
 }

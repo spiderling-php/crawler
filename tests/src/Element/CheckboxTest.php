@@ -13,7 +13,7 @@ class CheckboxTest extends AbstractTestCase
     public function dataGetValue()
     {
         return [
-            ['notifyme', null],
+            ['notifyme', 'yes'],
             ['newsletters', 'test'],
         ];
     }
