@@ -30,11 +30,6 @@ Content-Length: 2
 
 uk
 --56054f939e50e
-Content-Disposition: form-data; name="submit input"
-Content-Length: 11
-
-Submit Item
---56054f939e50e
 Content-Disposition: form-data; name="file"; filename="file.txt"
 Content-Length: 10
 Content-Type: text/plain

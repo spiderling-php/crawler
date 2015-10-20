@@ -7,17 +7,22 @@ namespace SP\Crawler\Element;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-class Checkbox extends AbstractInput
+class Checkbox extends AbstractElement implements ClickableInterface, InputInterface
 {
     /**
      * @param boolean $value
      */
     public function setValue($value)
     {
-        if ($value) {
-            $this->setAttribute('checked', 'checked');
-        } else {
+        $this->setAttribute('value', $value);
+    }
+
+    public function click()
+    {
+        if ($this->hasAttribute('checked')) {
             $this->removeAttribute('checked');
+        } else {
+            $this->setAttribute('checked', 'checked');
         }
     }
 

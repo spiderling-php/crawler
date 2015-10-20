@@ -7,16 +7,20 @@ namespace SP\Crawler\Element;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-abstract class AbstractInput extends AbstractElement
+interface InputInterface
 {
     /**
      * @return mixed
      */
-    abstract public function getValue();
+    public function getValue();
 
     /**
      * @param mixed $value
      */
-    abstract public function setValue($value);
+    public function setValue($value);
 
+    /**
+     * @return boolean
+     */
+    public function isDisabled();
 }

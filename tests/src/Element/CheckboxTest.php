@@ -34,10 +34,8 @@ class CheckboxTest extends AbstractTestCase
     public function dataSetValue()
     {
         return [
-            ['notifyme', true, 'input#notifyme[checked]'],
-            ['notifyme', false, 'input#notifyme:not([checked])'],
-            ['newsletters', true, 'input#newsletters[checked]'],
-            ['newsletters', false, 'input#newsletters:not([checked])'],
+            ['notifyme', 'test', 'input#notifyme[value=test]'],
+            ['notifyme', 'other', 'input#notifyme[value=other]'],
         ];
     }
 
@@ -51,8 +49,26 @@ class CheckboxTest extends AbstractTestCase
 
         $input = new Checkbox($this->crawler, $domElement);
 
-        $input->setValue($value);
+        $input->setvalue($value);
 
         $this->assertMatchesSelector($expected, $domElement);
+    }
+
+    /**
+     * @covers ::click
+     */
+    public function testClick()
+    {
+        $domElement = $this->document->getElementById('notifyme');
+
+        $input = new Checkbox($this->crawler, $domElement);
+
+        $input->click();
+
+        $this->assertMatchesSelector('input[checked]', $domElement);
+
+        $input->click();
+
+        $this->assertNotMatchesSelector('input[checked]', $domElement);
     }
 }

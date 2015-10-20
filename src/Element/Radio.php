@@ -20,15 +20,13 @@ class Radio extends Checkbox
         }
     }
 
-    /**
-     * @param boolean $value
-     */
-    public function setValue($value)
+    public function click()
     {
-        if ($value) {
+        if ($this->hasAttribute('checked')) {
+            $this->removeAttribute('checked');
+        } else {
             $this->uncheckOthers();
+            $this->setAttribute('checked', 'checked');
         }
-
-        parent::setValue($value);
     }
 }

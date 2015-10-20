@@ -7,7 +7,7 @@ namespace SP\Crawler\Element;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-class Input extends AbstractInput
+class Input extends AbstractElement implements InputInterface
 {
     /**
      * @param string $value

@@ -2,6 +2,10 @@
 
 namespace SP\Crawler\Element;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\MultipartStream;
+
 /**
  * @author    Ivan Kerin <ikerin@gmail.com>
  * @copyright 2015, Clippings Ltd.
@@ -146,5 +150,35 @@ FIELDS;
         }
 
         return $data;
+    }
+
+    public function getHeaders()
+    {
+        if ($this->isGet()) {
+            return [];
+        } elseif ($this->isMultipart()) {
+            return ['Content-Type' => 'multipart/form-data; boundary='.$this->multipartBoundary];
+        } else {
+            return ['Content-Type' => 'application/x-www-form-urlencoded'];
+        }
+    }
+
+    public function getRequest(array $data = [])
+    {
+        $method = $this->getMethod();
+        $uri = new Uri($this->getAction());
+        $body = null;
+
+        if ($this->isGet()) {
+            foreach ($this->getData($data) as $key => $value) {
+                $uri = Uri::withQueryValue($uri, $key, $value);
+            }
+        } elseif ($this->isMultipart()) {
+            $body = new MultipartStream($this->getMultipartData($data), $this->multipartBoundary);
+        } else {
+            $body = http_build_query($this->getData($data), null, '&');
+        }
+
+        return new Request($method, $uri, $this->getHeaders(), $body);
     }
 }

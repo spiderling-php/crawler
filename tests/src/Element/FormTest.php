@@ -208,4 +208,119 @@ class FormTest extends AbstractTestCase
 
         $this->assertEquals($expected, $data);
     }
+
+    /**
+     * @covers ::getHeaders
+     */
+    public function testGetHeadersGet()
+    {
+        $this->form->setAttribute('method', 'get');
+
+        $headers = $this->form->getHeaders();
+
+        $this->assertEmpty($headers);
+    }
+
+    /**
+     * @covers ::getHeaders
+     */
+    public function testGetHeadersMultipart()
+    {
+        $this->form->setAttribute('enctype', 'multipart/form-data');
+        $this->form->setMultipartBoundary('56054f939e50e');
+
+        $headers = $this->form->getHeaders();
+
+        $this->assertArraySubset(
+            ['Content-Type' => 'multipart/form-data; boundary=56054f939e50e'],
+            $headers
+        );
+    }
+
+    /**
+     * @covers ::getHeaders
+     */
+    public function testGetHeadersPost()
+    {
+        $headers = $this->form->getHeaders();
+
+        $this->assertArraySubset(
+            ['Content-Type' => 'application/x-www-form-urlencoded'],
+            $headers
+        );
+    }
+
+    /**
+     * @covers ::getRequest
+     */
+    public function testGetRequestPost()
+    {
+        $request = $this->form->getRequest(['submit_input' => 'Submit Item']);
+
+        $this->assertInstanceOf('GuzzleHttp\Psr7\Request', $request);
+        $this->assertEquals('POST', $request->getMethod());
+        $this->assertEquals('/test_functest/contact', (string) $request->getUri());
+
+        parse_str((string) $request->getBody(), $body);
+
+        $expected = [
+            'email' => 'tom@example.com',
+            'name' => 'Tomas',
+            'gender' => 'female',
+            'newsletters' => 'test',
+            'message' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+ tempor incididunt ut labore et dolore magna aliqua.',
+            'country' => 'uk',
+            'submit_input' => 'Submit Item',
+        ];
+
+        $this->assertEquals($expected, $body);
+    }
+
+    /**
+     * @covers ::getRequest
+     */
+    public function testClickGet()
+    {
+        $this->form->removeAttribute('method');
+
+        $request = $this->form->getRequest();
+
+        $this->assertInstanceOf('GuzzleHttp\Psr7\Request', $request);
+        $this->assertEquals('GET', $request->getMethod());
+        $this->assertEquals('/test_functest/contact', $request->getUri()->getPath());
+
+        $expected = [
+            'email' => 'tom@example.com',
+            'name' => 'Tomas',
+            'gender' => 'female',
+            'newsletters' => 'test',
+            'message' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+ tempor incididunt ut labore et dolore magna aliqua.',
+            'country' => 'uk',
+        ];
+
+        parse_str((string) $request->getUri()->getQuery(), $query);
+
+        $this->assertEquals($expected, $query);
+        $this->assertEmpty((string) $request->getBody());
+    }
+
+    /**
+     * @covers ::getRequest
+     */
+    public function testClickMultipart()
+    {
+        $this->form->setAttribute('enctype', 'multipart/form-data');
+        $this->form->setMultipartBoundary('56054f939e50e');
+
+        $file = $this->document->getElementById('file');
+        $file->setAttribute('value', self::getFilesDir().'file.txt');
+
+        $request = $this->form->getRequest();
+
+        $expected = file_get_contents(self::getFilesDir().'multipart.txt');
+
+        $this->assertEquals($expected, (string) $request->getBody());
+    }
 }

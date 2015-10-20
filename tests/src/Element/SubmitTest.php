@@ -3,7 +3,7 @@
 namespace SP\Crawler\Test\Element;
 
 use SP\Crawler\Element\Submit;
-use h4cc\Multipart\ParserSelector;
+use GuzzleHttp\Psr7\Request;
 use SP\Crawler\Test\AbstractTestCase;
 
 /**
@@ -17,10 +17,11 @@ class SubmitTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $domElement = $this->document->getElementById('submit');
+        $this->domElement = $this->document->getElementById('submit');
 
-        $this->submit = new Submit($this->crawler, $domElement);
+        $this->submit = new Submit($this->crawler, $this->domElement);
     }
+
     /**
      * @covers ::getForm
      * @covers ::getFormElement
@@ -34,76 +35,54 @@ class SubmitTest extends AbstractTestCase
     }
 
     /**
-     * @covers ::click
+     * @covers ::getDefaultData
      */
-    public function testClick()
+    public function testGetDefaultData()
     {
-        $request = $this->submit->click();
+        $data = $this->submit->getDefaultData();
 
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Request', $request);
-        $this->assertEquals('POST', $request->getMethod());
-        $this->assertEquals('/test_functest/contact', (string) $request->getUri());
+        $expected = ['submit input' => 'Submit Item'];
 
-        parse_str((string) $request->getBody(), $body);
-
-        $expected = [
-            'email' => 'tom@example.com',
-            'name' => 'Tomas',
-            'gender' => 'female',
-            'newsletters' => 'test',
-            'message' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
- tempor incididunt ut labore et dolore magna aliqua.',
-            'country' => 'uk',
-            'submit_input' => 'Submit Item',
-        ];
-
-        $this->assertEquals($expected, $body);
+        $this->assertEquals($expected, $data);
     }
 
     /**
-     * @covers ::click
+     * @covers ::clickRequest
      */
-    public function testClickGet()
+    public function testClickRequest()
     {
-        $this->submit->getForm()->removeAttribute('method');
+        $request = new Request('GET', '/test');
+        $data = ['test' => 'testval'];
 
-        $request = $this->submit->click();
+        $submit = $this
+            ->getMockBuilder('SP\Crawler\Element\Submit')
+            ->setMethods(['getFormElement', 'getAttribute'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->assertInstanceOf('GuzzleHttp\Psr7\Request', $request);
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/test_functest/contact', $request->getUri()->getPath());
+        $form = $this
+            ->getMockBuilder('SP\Crawler\Element\Form')
+            ->setMethods(['getRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $expected = [
-            'email' => 'tom@example.com',
-            'name' => 'Tomas',
-            'gender' => 'female',
-            'newsletters' => 'test',
-            'message' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
- tempor incididunt ut labore et dolore magna aliqua.',
-            'country' => 'uk',
-            'submit_input' => 'Submit Item',
-        ];
+        $submit
+            ->method('getAttribute')
+            ->will($this->returnValueMap([
+                ['name', 'test'],
+                ['value', 'testval'],
+            ]));
 
-        parse_str((string) $request->getUri()->getQuery(), $body);
+        $submit
+            ->method('getFormElement')
+            ->willReturn($form);
 
-        $this->assertEquals($expected, $body);
-    }
+        $form
+            ->expects($this->once())
+            ->method('getRequest')
+            ->with($data)
+            ->willReturn($request);
 
-    /**
-     * @covers ::click
-     */
-    public function testClickMultipart()
-    {
-        $this->submit->getForm()->setAttribute('enctype', 'multipart/form-data');
-        $this->submit->getFormElement()->setMultipartBoundary('56054f939e50e');
-
-        $file = $this->document->getElementById('file');
-        $file->setAttribute('value', self::getFilesDir().'file.txt');
-
-        $request = $this->submit->click();
-
-        $expected = file_get_contents(self::getFilesDir().'multipart.txt');
-
-        $this->assertEquals($expected, (string) $request->getBody());
+        $this->assertSame($request, $submit->clickRequest());
     }
 }

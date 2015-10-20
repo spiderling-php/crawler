@@ -3,6 +3,9 @@
 namespace SP\Crawler;
 
 use SP\Spiderling\CrawlerInterface;
+use SP\Crawler\Element\ClickRequestInterface;
+use SP\Crawler\Element\ClickableInterface;
+use Psr\Http\Message\RequestInterface;
 use SP\Spiderling\Query\AbstractQuery;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
@@ -19,27 +22,6 @@ use BadMethodCallException;
  */
 class Reader implements CrawlerInterface
 {
-    /**
-     * @var array
-     */
-    private static $inputMatchers = [
-        'SP\Crawler\Element\Checkbox'    => 'self::input[@type="checkbox"]',
-        'SP\Crawler\Element\Radio'       => 'self::input[@type="radio"]',
-        'SP\Crawler\Element\File'        => 'self::input[@type="file"]',
-        'SP\Crawler\Element\Input'       => 'self::input',
-        'SP\Crawler\Element\Select'      => 'self::select',
-        'SP\Crawler\Element\Textarea'    => 'self::textarea',
-        'SP\Crawler\Element\Option'      => 'self::option',
-    ];
-
-    /**
-     * @return array
-     */
-    public static function getInputMatchers()
-    {
-        return self::$inputMatchers;
-    }
-
     /**
      * @var DOMDocument
      */
@@ -64,7 +46,7 @@ class Reader implements CrawlerInterface
 
         $this->xpath = new DOMXPath($document);
 
-        $this->inputMap = new ElementMap($this, self::$inputMatchers);
+        $this->inputMap = new InputMap($this);
     }
 
     /**
@@ -97,8 +79,28 @@ class Reader implements CrawlerInterface
      */
     public function click($id)
     {
+        $input = $this->getInput($this->getElement($id));
+
+        if ($input instanceof ClickableInterface) {
+            $input->click();
+        } elseif ($input instanceof ClickRequestInterface) {
+            $request = $input->clickRequest();
+            $this->sendRequest($request);
+        } else {
+            throw new BadMethodCallException(
+                sprintf('Cannot click on %s, %s', get_class($input), $id)
+            );
+        }
+    }
+
+    /**
+     * @param  RequestInterface $input
+     * @throws BadMethodCallException
+     */
+    public function sendRequest(RequestInterface $request)
+    {
         throw new BadMethodCallException(
-            sprintf('Method %s not supported by %s', __METHOD__, __CLASS__)
+            sprintf('Cannot send request to %s', $request->getUri())
         );
     }
 
@@ -247,7 +249,7 @@ class Reader implements CrawlerInterface
     /**
      * @param  DOMElement $element
      * @throws InvalidArgumentException when id not found
-     * @return Element\AbstractInput
+     * @return Element\AbstractElement
      */
     public function getInput(DOMElement $element)
     {

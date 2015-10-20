@@ -7,7 +7,7 @@ namespace SP\Crawler\Element;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-class Select extends AbstractInput
+class Select extends AbstractElement implements InputInterface
 {
     const SELECTED = './/option[@selected]';
     const VALUE = './/option[@value = "%s" or (not(@value) and contains(normalize-space(), "%s"))]';

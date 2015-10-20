@@ -7,7 +7,7 @@ namespace SP\Crawler\Element;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-class Option extends AbstractInput
+class Option extends AbstractElement implements InputInterface
 {
     /**
      * @return string
@@ -15,6 +15,11 @@ class Option extends AbstractInput
     public function getValue()
     {
         return $this->getAttribute('value');
+    }
+
+    public function setValue($value)
+    {
+        $this->setAttribute('value', $value);
     }
 
     /**
@@ -34,14 +39,14 @@ class Option extends AbstractInput
     /**
      * @param boolean $value
      */
-    public function setValue($value)
+    public function select()
     {
-        if ($value) {
-            $this->unselectOthers();
+        $this->unselectOthers();
+        $this->setAttribute('selected', 'seleced');
+    }
 
-            $this->setAttribute('selected', 'seleced');
-        } else {
-            $this->removeAttribute('selected');
-        }
+    public function unselect()
+    {
+        $this->removeAttribute('selected');
     }
 }

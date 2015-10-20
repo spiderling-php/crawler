@@ -11,15 +11,15 @@ use SP\Crawler\Test\AbstractTestCase;
 class AnchorTest extends AbstractTestCase
 {
     /**
-     * @covers ::click
+     * @covers ::clickRequest
      */
-    public function testClick()
+    public function testClickRequest()
     {
         $domElement = $this->document->getElementById('navlink-1');
 
         $anchor = new Anchor($this->crawler, $domElement);
 
-        $result = $anchor->click();
+        $result = $anchor->clickRequest();
 
         $this->assertInstanceOf('Psr\Http\Message\RequestInterface', $result);
         $this->assertEquals('/test_functest/subpage1', (string) $result->getUri());

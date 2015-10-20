@@ -9,12 +9,12 @@ use GuzzleHttp\Psr7\Request;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-class Anchor extends AbstractClickable
+class Anchor extends AbstractElement implements ClickRequestInterface
 {
     /**
      * @return Request
      */
-    public function click()
+    public function clickRequest()
     {
         return new Request('GET', $this->getAttribute('href'));
     }

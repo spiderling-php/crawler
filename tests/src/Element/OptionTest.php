@@ -53,6 +53,29 @@ class OptionTest extends AbstractTestCase
         $this->assertMatchesSelector($expected, $input->getSelect());
     }
 
+    public function dataSetValue()
+    {
+        return [
+            ['uk', 'test', 'option#uk[value=test]'],
+            ['uk', 'other', 'option#uk[value=other]'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataSetValue
+     * @covers ::setValue
+     */
+    public function testSetValue($id, $value, $expected)
+    {
+        $domElement = $this->document->getElementById($id);
+
+        $input = new Option($this->crawler, $domElement);
+
+        $input->setvalue($value);
+
+        $this->assertMatchesSelector($expected, $domElement);
+    }
+
     /**
      * @covers ::unselectOthers
      * @covers ::getSelect
@@ -71,9 +94,10 @@ class OptionTest extends AbstractTestCase
     }
 
     /**
-     * @covers ::setValue
+     * @covers ::select
+     * @covers ::unselect
      */
-    public function testSetValue()
+    public function testSelect()
     {
         $uk = $this->document->getElementById('uk');
         $bulgaria = $this->document->getElementById('bulgaria');
@@ -83,14 +107,14 @@ class OptionTest extends AbstractTestCase
         $optionBulgaria = new Option($this->crawler, $bulgaria);
         $select = new Select($this->crawler, $country);
 
-        $optionUk->setValue(false);
+        $optionUk->unselect();
 
         $this->assertMatchesSelector('option:not([selected])', $uk);
         $this->assertMatchesSelector('option:not([selected])', $bulgaria);
 
         $this->assertSame(false, $select->getValue());
 
-        $optionBulgaria->setValue(true);
+        $optionBulgaria->select();
 
         $this->assertMatchesSelector('option:not([selected])', $uk);
         $this->assertMatchesSelector('option[selected]', $bulgaria);

@@ -12,12 +12,27 @@ use InvalidArgumentException;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-class ElementMap
+class InputMap
 {
+    private static $inputClasses = [
+        'SP\Crawler\Element\Checkbox'    => 'self::input[@type="checkbox"]',
+        'SP\Crawler\Element\Radio'       => 'self::input[@type="radio"]',
+        'SP\Crawler\Element\File'        => 'self::input[@type="file"]',
+        'SP\Crawler\Element\Input'       => 'self::input',
+        'SP\Crawler\Element\Select'      => 'self::select',
+        'SP\Crawler\Element\Textarea'    => 'self::textarea',
+        'SP\Crawler\Element\Option'      => 'self::option',
+        'SP\Crawler\Element\Anchor'      => 'self::a',
+        'SP\Crawler\Element\Submit'      => 'self::*[@type="submit" and (self::input or self::button)]',
+    ];
+
     /**
-     * @var array
+     * @return array
      */
-    private $classMap;
+    public static function getInputClasses()
+    {
+        return self::$inputClasses;
+    }
 
     /**
      * @var Reader
@@ -31,11 +46,9 @@ class ElementMap
 
     /**
      * @param Reader $reader
-     * @param array  $classMap
      */
-    public function __construct(Reader $reader, $classMap)
+    public function __construct(Reader $reader)
     {
-        $this->classMap = $classMap;
         $this->reader = $reader;
         $this->items = new SplObjectStorage();
     }
@@ -49,19 +62,11 @@ class ElementMap
     }
 
     /**
-     * @return array
-     */
-    public function getClassMap()
-    {
-        return $this->classMap;
-    }
-
-    /**
      * @param  DOMElement $element
      * @param  string     $xpath
      * @return boolean
      */
-    public function elementMatches(DOMElement $element, $xpath)
+    public function inputMatches(DOMElement $element, $xpath)
     {
         return (bool) $this->reader->query($xpath, $element)->item(0);
     }
@@ -71,15 +76,15 @@ class ElementMap
      * @throws InvalidArgumentException
      * @return string
      */
-    public function getElementClass(DOMElement $element)
+    public function getInputClass(DOMElement $element)
     {
-        foreach ($this->classMap as $class => $xpath) {
-            if ($this->elementMatches($element, $xpath)) {
+        foreach (self::$inputClasses as $class => $xpath) {
+            if ($this->inputMatches($element, $xpath)) {
                 return $class;
             }
         }
 
-        throw new InvalidArgumentException(sprintf('%s is not an interactive element', $element->tagName));
+        throw new InvalidArgumentException(sprintf('%s is not an input', $element->tagName));
     }
 
     /**
@@ -89,7 +94,7 @@ class ElementMap
      */
     public function create(DOMElement $element)
     {
-        $class = $this->getElementClass($element);
+        $class = $this->getInputClass($element);
 
         return new $class($this->reader, $element);
     }

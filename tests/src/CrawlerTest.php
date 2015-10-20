@@ -14,20 +14,8 @@ use GuzzleHttp\Psr7\Uri;
 class CrawlerTest extends AbstractTestCase
 {
     /**
-     * @covers ::getClickableMatchers
-     */
-    public function testGetInputMatchers()
-    {
-        $result = Crawler::getClickableMatchers();
-
-        $this->assertArrayHasKey('SP\Crawler\Element\Anchor', $result);
-        $this->assertArrayHasKey('SP\Crawler\Element\Submit', $result);
-    }
-
-    /**
      * @covers ::__construct
      * @covers ::getLoader
-     * @covers ::getClickableMap
      */
     public function testConstruct()
     {
@@ -35,9 +23,6 @@ class CrawlerTest extends AbstractTestCase
 
         $this->assertSame($this->document, $crawler->getDocument());
         $this->assertSame($this->loader, $crawler->getLoader());
-
-        $this->assertInstanceOf('SP\Crawler\ElementMap', $crawler->getInputMap());
-        $this->assertSame($crawler, $crawler->getClickableMap()->getReader());
     }
 
     /**
@@ -63,62 +48,6 @@ HTML;
         $this->crawler->sendRequest($request);
 
         $this->assertEquals($responseBody, $this->crawler->getFullHtml());
-    }
-
-    public function dataGetClickable()
-    {
-        return [
-            ['navlink-1'  , 'SP\Crawler\Element\Anchor'],
-            ['submit-btn' , 'SP\Crawler\Element\Submit'],
-            ['submit'     , 'SP\Crawler\Element\Submit'],
-        ];
-    }
-
-    /**
-     * @dataProvider dataGetClickable
-     * @covers ::getClickable
-     */
-    public function testGetClickable($id, $class)
-    {
-        $element = $this->document->getElementById($id);
-        $result = $this->crawler->getClickable($element);
-        $this->assertInstanceOf($class, $result);
-        $this->assertSame($this->crawler, $result->getReader());
-    }
-
-    /**
-     * @covers ::click
-     */
-    public function testClick()
-    {
-        $element = $this->document->getElementById('navlink-1');
-        $request = new Request('GET', 'http://example.com');
-
-        $crawler = $this
-            ->getMockBuilder('SP\Crawler\Crawler')
-            ->setConstructorArgs([$this->loader, $this->document])
-            ->setMethods(['getClickable', 'sendRequest'])
-            ->getMock();
-
-        $clickable = $this->getMockForAbstractClass('SP\Crawler\Element\AbstractClickable', [$crawler, $element]);
-
-        $crawler
-            ->expects($this->once())
-            ->method('getClickable')
-            ->with($element)
-            ->willReturn($clickable);
-
-        $clickable
-            ->expects($this->once())
-            ->method('click')
-            ->willReturn($request);
-
-        $crawler
-            ->expects($this->once())
-            ->method('sendRequest')
-            ->with($request);
-
-        $crawler->click('//a[@id="navlink-1"]');
     }
 
     /**

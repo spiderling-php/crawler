@@ -33,7 +33,7 @@ class RadioTest extends AbstractTestCase
 
     /**
      * @covers ::uncheckOthers
-     * @covers ::setValue
+     * @covers ::click
      */
     public function testSetValue()
     {
@@ -43,17 +43,17 @@ class RadioTest extends AbstractTestCase
         $radioMale = new Radio($this->crawler, $male);
         $radioFemale = new Radio($this->crawler, $female);
 
-        $radioMale->setValue(true);
+        $radioMale->click();
 
         $this->assertTrue($male->hasAttribute('checked'));
         $this->assertFalse($female->hasAttribute('checked'));
 
-        $radioMale->setValue(false);
+        $radioMale->click();
 
         $this->assertFalse($male->hasAttribute('checked'));
         $this->assertFalse($female->hasAttribute('checked'));
 
-        $radioFemale->setValue(true);
+        $radioFemale->click();
 
         $this->assertFalse($male->hasAttribute('checked'));
         $this->assertTrue($female->hasAttribute('checked'));

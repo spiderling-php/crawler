@@ -5,29 +5,15 @@ namespace SP\Crawler\Test;
 use SP\PhpunitDomConstraints\DomConstraintsTrait;
 use DOMDocument;
 use SP\Crawler\Reader;
+use SP\Crawler\Element\Option;
 use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\Request;
 
 /**
  * @coversDefaultClass SP\Crawler\Reader
  */
 class ReaderTest extends AbstractTestCase
 {
-    /**
-     * @covers ::getInputMatchers
-     */
-    public function testGetInputMatchers()
-    {
-        $result = Reader::getInputMatchers();
-
-        $this->assertArrayHasKey('SP\Crawler\Element\Checkbox', $result);
-        $this->assertArrayHasKey('SP\Crawler\Element\File', $result);
-        $this->assertArrayHasKey('SP\Crawler\Element\Input', $result);
-        $this->assertArrayHasKey('SP\Crawler\Element\Option', $result);
-        $this->assertArrayHasKey('SP\Crawler\Element\Radio', $result);
-        $this->assertArrayHasKey('SP\Crawler\Element\Checkbox', $result);
-        $this->assertArrayHasKey('SP\Crawler\Element\Textarea', $result);
-    }
-
     /**
      * @covers ::__construct
      * @covers ::getDocument
@@ -44,7 +30,7 @@ class ReaderTest extends AbstractTestCase
         $this->assertInstanceOf('DOMXPath', $reader->getXPath());
         $this->assertSame($document, $reader->getXPath()->document);
 
-        $this->assertInstanceOf('SP\Crawler\ElementMap', $reader->getInputMap());
+        $this->assertInstanceOf('SP\Crawler\InputMap', $reader->getInputMap());
         $this->assertSame($reader, $reader->getInputMap()->getReader());
     }
 
@@ -78,16 +64,120 @@ class ReaderTest extends AbstractTestCase
     }
 
     /**
-     * @covers ::click
+     * @covers ::sendRequest
      */
-    public function testClick()
+    public function testSendRequest()
     {
         $this->setExpectedException(
             'BadMethodCallException',
-            'Method SP\Crawler\Reader::click not supported by SP\Crawler\Reader'
+            'Cannot send request to /'
         );
 
-        $this->reader->click('test id');
+        $this->reader->sendRequest(new Request('GET', '/'));
+    }
+
+    /**
+     * @covers ::click
+     */
+    public function testClickable()
+    {
+        $element = $this->document->getElementById('navlink-1');
+
+        $reader = $this
+            ->getMockBuilder('SP\Crawler\Reader')
+            ->setConstructorArgs([$this->document])
+            ->setMethods(['getInput', 'getElement'])
+            ->getMock();
+
+        $input = $this->getMock('SP\Crawler\Element\ClickableInterface');
+
+        $input
+            ->expects($this->once())
+            ->method('click');
+
+        $reader
+            ->expects($this->once())
+            ->method('getElement')
+            ->with('test id')
+            ->willReturn($element);
+
+        $reader
+            ->expects($this->once())
+            ->method('getInput')
+            ->with($element)
+            ->willReturn($input);
+
+        $reader->click('test id');
+    }
+
+    /**
+     * @covers ::click
+     */
+    public function testClickRequest()
+    {
+        $element = $this->document->getElementById('navlink-1');
+        $request = new Request('GET', 'http://example.com');
+
+        $reader = $this
+            ->getMockBuilder('SP\Crawler\Reader')
+            ->setConstructorArgs([$this->document])
+            ->setMethods(['getInput', 'getElement', 'sendRequest'])
+            ->getMock();
+
+        $input = $this->getMock('SP\Crawler\Element\ClickRequestInterface');
+
+        $input
+            ->expects($this->once())
+            ->method('clickRequest')
+            ->willReturn($request);
+
+        $reader
+            ->expects($this->once())
+            ->method('getElement')
+            ->with('test id')
+            ->willReturn($element);
+
+        $reader
+            ->expects($this->once())
+            ->method('getInput')
+            ->with($element)
+            ->willReturn($input);
+
+        $reader
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->with($request);
+
+        $reader->click('test id');
+    }
+
+    /**
+     * @covers ::click
+     */
+    public function testClickException()
+    {
+        $element = $this->document->getElementById('uk');
+
+        $reader = $this
+            ->getMockBuilder('SP\Crawler\Crawler')
+            ->setConstructorArgs([$this->loader, $this->document])
+            ->setMethods(['getInput', 'sendRequest'])
+            ->getMock();
+
+        $option = new Option($reader, $element);
+
+        $reader
+            ->expects($this->once())
+            ->method('getInput')
+            ->with($element)
+            ->willReturn($option);
+
+        $this->setExpectedException(
+            'BadMethodCallException',
+            'Cannot click on SP\Crawler\Element\Option, //option[@id="uk"]'
+        );
+
+        $reader->click('//option[@id="uk"]');
     }
 
     /**
@@ -244,6 +334,8 @@ class ReaderTest extends AbstractTestCase
             ['country'     , 'SP\Crawler\Element\Select'],
             ['uk'          , 'SP\Crawler\Element\Option'],
             ['file'        , 'SP\Crawler\Element\File'],
+            ['navlink-1'   , 'SP\Crawler\Element\Anchor'],
+            ['submit-btn'  , 'SP\Crawler\Element\Submit'],
         ];
     }
 
@@ -272,7 +364,7 @@ class ReaderTest extends AbstractTestCase
             ->setMethods(['getInput'])
             ->getMock();
 
-        $input = $this->getMockForAbstractClass('SP\Crawler\Element\AbstractInput', [$reader, $element]);
+        $input = $this->getMock('SP\Crawler\Element\InputInterface');
 
         $input
             ->expects($this->once())
@@ -302,10 +394,12 @@ class ReaderTest extends AbstractTestCase
             ->setMethods(['getInput'])
             ->getMock();
 
-        $input = $this->getMockForAbstractClass(
-            'SP\Crawler\Element\AbstractInput',
-            [$reader, $element]
-        );
+        $input = $this->getMock('SP\Crawler\Element\InputInterface');
+
+        $input
+            ->expects($this->once())
+            ->method('isDisabled')
+            ->willReturn(false);
 
         $input
             ->expects($this->once())
