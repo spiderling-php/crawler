@@ -95,7 +95,6 @@ class OptionTest extends AbstractTestCase
 
     /**
      * @covers ::select
-     * @covers ::unselect
      */
     public function testSelect()
     {
@@ -107,12 +106,7 @@ class OptionTest extends AbstractTestCase
         $optionBulgaria = new Option($this->crawler, $bulgaria);
         $select = new Select($this->crawler, $country);
 
-        $optionUk->unselect();
-
-        $this->assertMatchesSelector('option:not([selected])', $uk);
-        $this->assertMatchesSelector('option:not([selected])', $bulgaria);
-
-        $this->assertSame(false, $select->getValue());
+        $this->assertSame('uk', $select->getValue());
 
         $optionBulgaria->select();
 

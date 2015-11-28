@@ -7,7 +7,7 @@ namespace SP\Crawler\Element;
  * @copyright 2015, Clippings Ltd.
  * @license   http://spdx.org/licenses/BSD-3-Clause
  */
-class Option extends AbstractElement implements InputInterface
+class Option extends AbstractElement implements InputInterface, SelectableInterface
 {
     /**
      * @return string
@@ -43,10 +43,5 @@ class Option extends AbstractElement implements InputInterface
     {
         $this->unselectOthers();
         $this->setAttribute('selected', 'seleced');
-    }
-
-    public function unselect()
-    {
-        $this->removeAttribute('selected');
     }
 }

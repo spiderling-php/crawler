@@ -5,6 +5,7 @@ namespace SP\Crawler;
 use SP\Spiderling\CrawlerInterface;
 use SP\Crawler\Element\ClickRequestInterface;
 use SP\Crawler\Element\ClickableInterface;
+use SP\Crawler\Element\SelectableInterface;
 use Psr\Http\Message\RequestInterface;
 use SP\Spiderling\Query\AbstractQuery;
 use GuzzleHttp\Psr7\Uri;
@@ -89,6 +90,23 @@ class Reader implements CrawlerInterface
         } else {
             throw new BadMethodCallException(
                 sprintf('Cannot click on %s, %s', get_class($input), $id)
+            );
+        }
+    }
+
+    /**
+     * @param  string $id
+     * @throws BadMethodCallException
+     */
+    public function select($id)
+    {
+        $input = $this->getInput($this->getElement($id));
+
+        if ($input instanceof SelectableInterface) {
+            $input->select();
+        } else {
+            throw new BadMethodCallException(
+                sprintf('Cannot select on %s, %s', get_class($input), $id)
             );
         }
     }

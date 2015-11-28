@@ -34,14 +34,6 @@ class ReaderTest extends AbstractTestCase
         $this->assertSame($reader, $reader->getInputMap()->getReader());
     }
 
-    public function dataUnsupportedMethod()
-    {
-        return [
-            ['click', 'id'],
-            ['open', 'url'],
-        ];
-    }
-
     /**
      * @covers ::getUri
      */
@@ -152,25 +144,45 @@ class ReaderTest extends AbstractTestCase
     }
 
     /**
-     * @covers ::click
+     * @covers ::select
      */
-    public function testClickException()
+    public function testSelect()
     {
         $element = $this->document->getElementById('uk');
 
         $reader = $this
-            ->getMockBuilder('SP\Crawler\Crawler')
-            ->setConstructorArgs([$this->loader, $this->document])
-            ->setMethods(['getInput', 'sendRequest'])
+            ->getMockBuilder('SP\Crawler\Reader')
+            ->setConstructorArgs([$this->document])
+            ->setMethods(['getInput', 'getElement'])
             ->getMock();
 
-        $option = new Option($reader, $element);
+        $input = $this->getMock('SP\Crawler\Element\SelectableInterface');
+
+        $input
+            ->expects($this->once())
+            ->method('select');
+
+        $reader
+            ->expects($this->once())
+            ->method('getElement')
+            ->with('test id')
+            ->willReturn($element);
 
         $reader
             ->expects($this->once())
             ->method('getInput')
             ->with($element)
-            ->willReturn($option);
+            ->willReturn($input);
+
+        $reader->select('test id');
+    }
+
+    /**
+     * @covers ::click
+     */
+    public function testClickException()
+    {
+        $reader = new Reader($this->document);
 
         $this->setExpectedException(
             'BadMethodCallException',
@@ -180,6 +192,20 @@ class ReaderTest extends AbstractTestCase
         $reader->click('//option[@id="uk"]');
     }
 
+    /**
+     * @covers ::select
+     */
+    public function testSelectException()
+    {
+        $reader = new Reader($this->document);
+
+        $this->setExpectedException(
+            'BadMethodCallException',
+            'Cannot select on SP\Crawler\Element\Anchor, //a[@id="navlink-1"]'
+        );
+
+        $reader->select('//a[@id="navlink-1"]');
+    }
     /**
      * @covers ::query
      */

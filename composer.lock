@@ -120,12 +120,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spiderling-php/spiderling.git",
-                "reference": "97a51fede4cc8254389adca1400fd86410fc9f76"
+                "reference": "2c5ba797ca8c781552058c52e82999e1e95b30fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spiderling-php/spiderling/zipball/97a51fede4cc8254389adca1400fd86410fc9f76",
-                "reference": "97a51fede4cc8254389adca1400fd86410fc9f76",
+                "url": "https://api.github.com/repos/spiderling-php/spiderling/zipball/2c5ba797ca8c781552058c52e82999e1e95b30fc",
+                "reference": "2c5ba797ca8c781552058c52e82999e1e95b30fc",
                 "shasum": ""
             },
             "require": {
@@ -153,7 +153,7 @@
                 }
             ],
             "description": "Browser emulator, for crawling web pages",
-            "time": "2015-11-28 10:30:18"
+            "time": "2015-11-28 11:42:01"
         },
         {
             "name": "symfony/css-selector",
