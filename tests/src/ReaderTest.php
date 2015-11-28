@@ -427,19 +427,26 @@ class ReaderTest extends AbstractTestCase
             ['selector', $filters]
         );
 
-        $filters
-            ->expects($this->exactly(3))
-            ->method('match')
-            ->will($this->returnValueMap([
-                [$this->reader, '(//body//div[@class="page"]/p)[1]', false],
-                [$this->reader, '(//body//div[@class="page"]/p)[2]', true],
-                [$this->reader, '(//body//div[@class="page"]/p)[3]', true],
-            ]));
-
         $query
             ->expects($this->once())
             ->method('getXPath')
             ->willReturn('//div[@class="page"]/p');
+
+        $filters
+            ->expects($this->once())
+            ->method('matchAll')
+            ->with(
+                $this->reader,
+                [
+                    '(//body//div[@class="page"]/p)[1]',
+                    '(//body//div[@class="page"]/p)[2]',
+                    '(//body//div[@class="page"]/p)[3]',
+                ]
+            )
+            ->willReturn([
+                '(//body//div[@class="page"]/p)[2]',
+                '(//body//div[@class="page"]/p)[3]',
+            ]);
 
         $result = $this->reader->queryIds($query, '//body');
 
