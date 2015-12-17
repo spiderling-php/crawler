@@ -51,6 +51,18 @@ class Reader implements CrawlerInterface
     }
 
     /**
+     * @param  string $content
+     * @return self
+     */
+    public function setDocumentContent($content)
+    {
+        $this->document->loadHtml((string) $content);
+        $this->xpath = new DOMXPath($this->document);
+
+        return $this;
+    }
+
+    /**
      * @return DOMDocument
      */
     public function getDocument()

@@ -28,9 +28,13 @@ class CrawlerTest extends AbstractTestCase
     /**
      * @covers ::sendRequest
      * @covers ::getFullHtml
+     * @covers ::setDocumentContent
      */
     public function testSendRequest()
     {
+        $emptyDocument = new DOMDocument();
+        $crawler = new Crawler($this->loader, $emptyDocument);
+
         $responseBody = <<<HTML
 <!DOCTYPE html>
 <html><body>Success!</body></html>
@@ -45,9 +49,17 @@ HTML;
             ->with($request)
             ->willReturn($response);
 
-        $this->crawler->sendRequest($request);
+        $crawler->sendRequest($request);
 
-        $this->assertEquals($responseBody, $this->crawler->getFullHtml());
+        $this->assertEquals($responseBody, $crawler->getFullHtml());
+
+        $result = $crawler->getXPath()->query('//body');
+
+        $this->assertEquals(
+            1,
+            $result->length,
+            'Should be able to use the new html'
+        );
     }
 
     /**

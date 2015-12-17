@@ -120,12 +120,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spiderling-php/spiderling.git",
-                "reference": "2c5ba797ca8c781552058c52e82999e1e95b30fc"
+                "reference": "319d3c49f01bf7aa64478eac628a2110d19cf6cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spiderling-php/spiderling/zipball/2c5ba797ca8c781552058c52e82999e1e95b30fc",
-                "reference": "2c5ba797ca8c781552058c52e82999e1e95b30fc",
+                "url": "https://api.github.com/repos/spiderling-php/spiderling/zipball/319d3c49f01bf7aa64478eac628a2110d19cf6cd",
+                "reference": "319d3c49f01bf7aa64478eac628a2110d19cf6cd",
                 "shasum": ""
             },
             "require": {
@@ -153,20 +153,20 @@
                 }
             ],
             "description": "Browser emulator, for crawling web pages",
-            "time": "2015-11-28 11:42:01"
+            "time": "2015-12-17 15:26:09"
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.7.7",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "abb47717fb88aebd9437da2fc8bb01a50a36679f"
+                "reference": "b600fec37c0efca08046d481d79e7eabc07108ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/abb47717fb88aebd9437da2fc8bb01a50a36679f",
-                "reference": "abb47717fb88aebd9437da2fc8bb01a50a36679f",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/b600fec37c0efca08046d481d79e7eabc07108ff",
+                "reference": "b600fec37c0efca08046d481d79e7eabc07108ff",
                 "shasum": ""
             },
             "require": {
@@ -175,7 +175,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev"
+                    "dev-master": "2.8-dev"
                 }
             },
             "autoload": {
@@ -206,7 +206,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-30 20:10:21"
+            "time": "2015-10-30 20:15:42"
         }
     ],
     "packages-dev": [

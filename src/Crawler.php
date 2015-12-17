@@ -48,7 +48,7 @@ class Crawler extends Reader
         $response = $this->loader->send($request);
         $contents = $response->getBody()->getContents();
 
-        $this->getDocument()->loadHtml($contents);
+        $this->setDocumentContent($contents);
     }
 
     /**
