@@ -4,6 +4,7 @@ namespace SP\Crawler\Test;
 
 use SP\PhpunitDomConstraints\DomConstraintsTrait;
 use DOMDocument;
+use DOMElement;
 use SP\Crawler\Reader;
 use SP\Crawler\Element\Option;
 use GuzzleHttp\Psr7\Uri;
@@ -206,12 +207,15 @@ class ReaderTest extends AbstractTestCase
 
         $reader->select('//a[@id="navlink-1"]');
     }
+
     /**
      * @covers ::query
      */
     public function testQuery()
     {
-        $items = $this->reader->query('//form');
+        $index = $this->document->getElementById('index');
+
+        $items = $this->reader->query('//form', $index);
 
         $this->assertEquals(1, $items->length);
         $this->assertMatchesSelector('form#form', $items->item(0));

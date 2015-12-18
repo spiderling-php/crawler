@@ -13,7 +13,6 @@ use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
 use DOMDocument;
 use DOMElement;
-use DOMXPath;
 use InvalidArgumentException;
 use BadMethodCallException;
 
@@ -30,7 +29,7 @@ class Reader implements CrawlerInterface
     private $document;
 
     /**
-     * @var DOMXPath
+     * @var SafeXPath
      */
     private $xpath;
 
@@ -46,7 +45,7 @@ class Reader implements CrawlerInterface
     {
         $this->document = $document;
 
-        $this->xpath = new DOMXPath($document);
+        $this->xpath = new SafeXPath($document);
 
         $this->inputMap = new InputMap($this);
     }
@@ -58,7 +57,7 @@ class Reader implements CrawlerInterface
     public function setDocumentContent($content)
     {
         $this->document->loadHtml((string) $content);
-        $this->xpath = new DOMXPath($this->document);
+        $this->xpath = new SafeXPath($this->document);
 
         return $this;
     }
@@ -72,7 +71,7 @@ class Reader implements CrawlerInterface
     }
 
     /**
-     * @return DOMXPath
+     * @return SafeXPath
      */
     public function getXPath()
     {
@@ -157,6 +156,7 @@ class Reader implements CrawlerInterface
     /**
      * @param  string          $xpath
      * @param  DOMElement|null $scope
+     * @throws InvalidArgumentException If xpath is not valid
      * @return DOMNodeList
      */
     public function query($xpath, DOMElement $scope = null)
