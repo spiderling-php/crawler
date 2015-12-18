@@ -33,7 +33,7 @@ class SafeXPathTest extends AbstractTestCase
     {
         $xpath = new SafeXPath($this->document);
 
-        $this->setExpectedException('InvalidArgumentException', 'Invalid predicate)');
+        $this->setExpectedException('InvalidArgumentException', 'Invalid predicate');
 
         $xpath->query('//div[@test');
     }
@@ -46,7 +46,7 @@ class SafeXPathTest extends AbstractTestCase
     {
         $xpath = new SafeXPath($this->document);
 
-        $this->setExpectedException('InvalidArgumentException', 'Node From Wrong Document)');
+        $this->setExpectedException('InvalidArgumentException', 'Node From Wrong Document');
 
         $xpath->query('//form', new DOMElement('div'));
     }
