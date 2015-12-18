@@ -201,7 +201,7 @@ class FormTest extends AbstractTestCase
             ],
             [
                 'name' => 'file',
-                'contents' => "test file\n",
+                'contents' => $data[7]['contents'],
                 'filename' => self::getFilesDir().'file.txt',
             ],
         ];

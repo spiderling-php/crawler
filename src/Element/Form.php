@@ -61,7 +61,7 @@ FIELDS;
     public function getMultipartBoundary()
     {
         if (null === $this->multipartBoundary) {
-            $this->multipartBoundary = uniqid();
+            $this->multipartBoundary = '----SpiderlingCrawler'.uniqid();
         }
 
         return $this->multipartBoundary;
@@ -144,7 +144,7 @@ FIELDS;
         foreach ($this->getInputs(self::$filesXPath) as $input) {
             $data []= [
                 'name' => $input->getName(),
-                'contents' => file_get_contents($input->getValue()),
+                'contents' => fopen($input->getValue(), 'r'),
                 'filename' => $input->getValue(),
             ];
         }
@@ -157,7 +157,7 @@ FIELDS;
         if ($this->isGet()) {
             return [];
         } elseif ($this->isMultipart()) {
-            return ['Content-Type' => 'multipart/form-data; boundary='.$this->multipartBoundary];
+            return ['Content-Type' => 'multipart/form-data; boundary='.$this->getMultipartBoundary()];
         } else {
             return ['Content-Type' => 'application/x-www-form-urlencoded'];
         }
@@ -174,7 +174,7 @@ FIELDS;
                 $uri = Uri::withQueryValue($uri, $key, $value);
             }
         } elseif ($this->isMultipart()) {
-            $body = new MultipartStream($this->getMultipartData($data), $this->multipartBoundary);
+            $body = new MultipartStream($this->getMultipartData($data), $this->getMultipartBoundary());
         } else {
             $body = http_build_query($this->getData($data), null, '&');
         }
