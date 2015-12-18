@@ -442,6 +442,73 @@ class ReaderTest extends AbstractTestCase
     }
 
     /**
+     * @covers ::setFile
+     */
+    public function testSetFile()
+    {
+        $element = $this->document->getElementById('file');
+
+        $reader = $this
+            ->getMockBuilder('SP\Crawler\Reader')
+            ->setConstructorArgs([$this->document])
+            ->setMethods(['getInput'])
+            ->getMock();
+
+        $input = $this->getMockBuilder('SP\Crawler\Element\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $input
+            ->expects($this->once())
+            ->method('isDisabled')
+            ->willReturn(false);
+
+        $input
+            ->expects($this->once())
+            ->method('setValue')
+            ->with('/var/usr/example.jpg');
+
+        $reader
+            ->expects($this->once())
+            ->method('getInput')
+            ->with($element)
+            ->willReturn($input);
+
+        $reader->setFile('//*[@id="file"]', '/var/usr/example.jpg');
+    }
+
+    /**
+     * @covers ::setFile
+     */
+    public function testSetFileOnInput()
+    {
+        $element = $this->document->getElementById('message');
+
+        $input = $this->getMockBuilder('SP\Crawler\Element\Textarea')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $reader = $this
+            ->getMockBuilder('SP\Crawler\Reader')
+            ->setConstructorArgs([$this->document])
+            ->setMethods(['getInput'])
+            ->getMock();
+
+        $reader
+            ->expects($this->once())
+            ->method('getInput')
+            ->with($element)
+            ->willReturn($input);
+
+        $this->setExpectedException(
+            'InvalidArgumentException',
+            'Node with id //textarea is not a file'
+        );
+
+        $reader->setFile('//textarea', '/var/usr/example.jpg');
+    }
+
+    /**
      * @covers ::queryIds
      */
     public function testQueryIds()

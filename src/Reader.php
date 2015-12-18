@@ -6,6 +6,7 @@ use SP\Spiderling\CrawlerInterface;
 use SP\Crawler\Element\ClickRequestInterface;
 use SP\Crawler\Element\ClickableInterface;
 use SP\Crawler\Element\SelectableInterface;
+use SP\Crawler\Element\File;
 use Psr\Http\Message\RequestInterface;
 use SP\Spiderling\Query\AbstractQuery;
 use GuzzleHttp\Psr7\Uri;
@@ -307,6 +308,26 @@ class Reader implements CrawlerInterface
 
         if (false === $input->isDisabled()) {
             $input->setValue($value);
+        }
+    }
+
+    /**
+     * @param  string $id
+     * @param  string $file
+     * @throws InvalidArgumentException when id not found or not a file
+     */
+    public function setFile($id, $file)
+    {
+        $input = $this->getInput($this->getElement($id));
+
+        if (false === ($input instanceof File)) {
+            throw new InvalidArgumentException(
+                sprintf('Node with id %s is not a file', $id)
+            );
+        }
+
+        if (false === $input->isDisabled()) {
+            $input->setValue($file);
         }
     }
 
