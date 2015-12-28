@@ -37,7 +37,7 @@
                     </div>
                     <div class="row">
                         <label for="name">Enter Name</label>
-                        <input id="name" name="name" value="Tomas">
+                        <input id="name" name="profile[name]" value="Tomas">
                     </div>
                     <div class="row">
                         <label for="gender-1">Gender Male</label>
@@ -76,7 +76,9 @@
                         <label for="file" title="Logo Title">
                             Logo <img alt="Logo Image" src="Logo.png">
                         </label>
-                        <input id="file" name="file" type="file" value="file.txt">
+                        <input id="file" name="file" type="file" value="tests/files/file.txt">
+                        <input id="empty-file" name="other[empty]" type="file">
+                        <input id="other-file" name="other[file]" type="file" value="tests/files/other.txt">
                     </div>
                     <div class="actions">
                         <input id="submit" name="submit input" type="submit" value="Submit Item">

@@ -9,9 +9,15 @@
             "role": "Author"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ivank/psr7"
+        }
+    ],
     "require": {
         "spiderling-php/spiderling": "dev-master@dev",
-        "guzzlehttp/psr7": "^1.0"
+        "guzzlehttp/psr7": "dev-server-request as 1.3"
     },
     "require-dev": {
         "spiderling-php/phpunit-matches-selector": "^0.2"

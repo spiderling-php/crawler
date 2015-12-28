@@ -5,6 +5,7 @@ namespace SP\Crawler\Element;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\ServerRequest;
 
 /**
  * @author    Ivan Kerin <ikerin@gmail.com>
@@ -28,6 +29,20 @@ class Form extends AbstractElement
 FIELDS;
 
     private static $filesXPath = "//input[not(@disabled) and @type = 'file' and @value]";
+    private static $allFilesXPath = "//input[not(@disabled) and @type = 'file']";
+
+    public static function toNestedParams(array $params)
+    {
+        $flatParams = [];
+        foreach ($params as $key => $value) {
+            $flatParams []= $key.'='.$value;
+        }
+
+        $params = join('&', $flatParams);
+        parse_str($params, $nested);
+
+        return $nested;
+    }
 
     /**
      * @return string
@@ -152,6 +167,9 @@ FIELDS;
         return $data;
     }
 
+    /**
+     * @return array
+     */
     public function getHeaders()
     {
         if ($this->isGet()) {
@@ -163,6 +181,26 @@ FIELDS;
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getFiles()
+    {
+        $files = [];
+
+        foreach ($this->getInputs(self::$allFilesXPath) as $input) {
+            foreach ($input->getPhpFileArray() as $key => $value) {
+                $files[$input->getName()."[$key]"] = $value;
+            }
+        }
+
+        return self::toNestedParams($files);
+    }
+
+    /**
+     * @param  array  $data
+     * @return ServerRequest
+     */
     public function getRequest(array $data = [])
     {
         $method = $this->getMethod();
@@ -179,6 +217,13 @@ FIELDS;
             $body = http_build_query($this->getData($data), null, '&');
         }
 
-        return new Request($method, $uri, $this->getHeaders(), $body);
+        $request = new ServerRequest($method, $uri, $this->getHeaders(), $body);
+
+        $files = $this->getFiles();
+
+        return $request
+            ->withParsedBody(self::toNestedParams($this->getData($data)))
+            ->withAttribute('FILES', $files)
+            ->withUploadedFiles(ServerRequest::normalizeFiles($files));
     }
 }

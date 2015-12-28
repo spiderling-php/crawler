@@ -4,7 +4,7 @@ Content-Length: 15
 
 tom@example.com
 --56054f939e50e
-Content-Disposition: form-data; name="name"
+Content-Disposition: form-data; name="profile[name]"
 Content-Length: 5
 
 Tomas
@@ -35,5 +35,12 @@ Content-Length: 10
 Content-Type: text/plain
 
 test file
+
+--56054f939e50e
+Content-Disposition: form-data; name="other[file]"; filename="other.txt"
+Content-Length: 16
+Content-Type: text/plain
+
+other test file
 
 --56054f939e50e--
