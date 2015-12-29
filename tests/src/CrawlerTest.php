@@ -4,7 +4,7 @@ namespace SP\Crawler\Test;
 
 use DOMDocument;
 use SP\Crawler\Crawler;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
 
@@ -40,7 +40,7 @@ class CrawlerTest extends AbstractTestCase
 <html><body>Success!</body></html>
 
 HTML;
-        $request = new Request('GET', 'http://example.com');
+        $request = new ServerRequest('GET', 'http://example.com');
         $response = new Response(200, [], $responseBody);
 
         $this->loader
@@ -80,7 +80,7 @@ HTML;
             ->method('sendRequest')
             ->with(
                 $this->logicalAnd(
-                    $this->isInstanceOf('Psr\Http\Message\RequestInterface'),
+                    $this->isInstanceOf('Psr\Http\Message\ServerRequestInterface'),
                     $this->attribute(
                         $this->equalTo($uri),
                         'uri'
@@ -98,12 +98,12 @@ HTML;
     {
         $uriString = 'http://example.com/api/users';
 
-        $request = new Uri($uriString);
+        $uri = new Uri($uriString);
 
         $this->loader
             ->expects($this->once())
             ->method('getCurrentUri')
-            ->willReturn($request);
+            ->willReturn($uri);
 
         $result = $this->crawler->getUri();
 

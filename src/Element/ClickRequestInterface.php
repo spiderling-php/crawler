@@ -2,7 +2,7 @@
 
 namespace SP\Crawler\Element;
 
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @author    Ivan Kerin <ikerin@gmail.com>
@@ -12,7 +12,7 @@ use Psr\Http\Message\RequestInterface;
 interface ClickRequestInterface
 {
     /**
-     * @return RequestInterface
+     * @return ServerRequestInterface
      */
     public function clickRequest();
 }

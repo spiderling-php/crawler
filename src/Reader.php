@@ -7,7 +7,7 @@ use SP\Crawler\Element\ClickRequestInterface;
 use SP\Crawler\Element\ClickableInterface;
 use SP\Crawler\Element\SelectableInterface;
 use SP\Crawler\Element\File;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use SP\Spiderling\Query\AbstractQuery;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
@@ -124,10 +124,10 @@ class Reader implements CrawlerInterface
     }
 
     /**
-     * @param  RequestInterface $input
+     * @param  ServerRequestInterface $input
      * @throws BadMethodCallException
      */
-    public function sendRequest(RequestInterface $request)
+    public function sendRequest(ServerRequestInterface $request)
     {
         throw new BadMethodCallException(
             sprintf('Cannot send request to %s', $request->getUri())

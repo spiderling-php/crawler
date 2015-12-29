@@ -2,7 +2,7 @@
 
 namespace SP\Crawler\Element;
 
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\ServerRequest;
 
 /**
  * @author    Ivan Kerin <ikerin@gmail.com>
@@ -12,10 +12,10 @@ use GuzzleHttp\Psr7\Request;
 class Anchor extends AbstractElement implements ClickRequestInterface
 {
     /**
-     * @return Request
+     * @return ServerRequest
      */
     public function clickRequest()
     {
-        return new Request('GET', $this->getAttribute('href'));
+        return new ServerRequest('GET', $this->getAttribute('href'));
     }
 }

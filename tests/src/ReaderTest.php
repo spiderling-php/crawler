@@ -8,7 +8,7 @@ use DOMElement;
 use SP\Crawler\Reader;
 use SP\Crawler\Element\Option;
 use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\ServerRequest;
 
 /**
  * @coversDefaultClass SP\Crawler\Reader
@@ -66,7 +66,7 @@ class ReaderTest extends AbstractTestCase
             'Cannot send request to /'
         );
 
-        $this->reader->sendRequest(new Request('GET', '/'));
+        $this->reader->sendRequest(new ServerRequest('GET', '/'));
     }
 
     /**
@@ -109,7 +109,7 @@ class ReaderTest extends AbstractTestCase
     public function testClickRequest()
     {
         $element = $this->document->getElementById('navlink-1');
-        $request = new Request('GET', 'http://example.com');
+        $request = new ServerRequest('GET', 'http://example.com');
 
         $reader = $this
             ->getMockBuilder('SP\Crawler\Reader')

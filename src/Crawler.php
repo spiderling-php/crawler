@@ -2,10 +2,10 @@
 
 namespace SP\Crawler;
 
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use SP\Crawler\Element\AbstractElement;
 use Psr\Http\Message\UriInterface;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\ServerRequest;
 use DOMDocument;
 use DOMElement;
 
@@ -41,9 +41,9 @@ class Crawler extends Reader
     }
 
     /**
-     * @param  RequestInterface $request
+     * @param  ServerRequestInterface $request
      */
-    public function sendRequest(RequestInterface $request)
+    public function sendRequest(ServerRequestInterface $request)
     {
         $response = $this->loader->send($request);
         $contents = $response->getBody()->getContents();
@@ -56,7 +56,7 @@ class Crawler extends Reader
      */
     public function open(UriInterface $uri)
     {
-        $request = new Request('GET', $uri);
+        $request = new ServerRequest('GET', $uri);
 
         $this->sendRequest($request);
     }

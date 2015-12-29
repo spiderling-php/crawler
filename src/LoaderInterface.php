@@ -2,7 +2,7 @@
 
 namespace SP\Crawler;
 
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @author    Ivan Kerin <ikerin@gmail.com>
@@ -12,9 +12,9 @@ use Psr\Http\Message\RequestInterface;
 interface LoaderInterface
 {
     /**
-     * @param  RequestInterface $request
+     * @param  ServerRequestInterface $request
      */
-    public function send(RequestInterface $request);
+    public function send(ServerRequestInterface $request);
 
     /**
      * @return \Psr\Http\Message\UriInterface
