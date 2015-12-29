@@ -15,6 +15,7 @@ use InvalidArgumentException;
 class InputMap
 {
     private static $inputClasses = [
+        'SP\Crawler\Element\Submit'      => 'self::*[@type="submit" and (self::input or self::button)]',
         'SP\Crawler\Element\Checkbox'    => 'self::input[@type="checkbox"]',
         'SP\Crawler\Element\Radio'       => 'self::input[@type="radio"]',
         'SP\Crawler\Element\File'        => 'self::input[@type="file"]',
@@ -23,7 +24,6 @@ class InputMap
         'SP\Crawler\Element\Textarea'    => 'self::textarea',
         'SP\Crawler\Element\Option'      => 'self::option',
         'SP\Crawler\Element\Anchor'      => 'self::a',
-        'SP\Crawler\Element\Submit'      => 'self::*[@type="submit" and (self::input or self::button)]',
     ];
 
     /**
